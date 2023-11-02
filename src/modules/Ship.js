@@ -5,15 +5,15 @@ class Ship {
     this.sunked = false;
   }
 
-  static hit() {
+  hit() {
     this.timesHit += 1;
   }
 
-  static isSunk() {
+  isSunk() {
     if (this.timesHit === this.length) {
       this.sunked = true;
-      return this.sunked;
     }
+    return this.sunked;
   }
 }
 
