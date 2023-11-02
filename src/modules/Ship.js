@@ -10,9 +10,7 @@ class Ship {
   }
 
   isSunk() {
-    if (this.timesHit === this.length) {
-      this.sunked = true;
-    }
+    this.sunked = this.timesHit === this.length;
     return this.sunked;
   }
 }

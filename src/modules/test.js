@@ -12,11 +12,19 @@ describe("Ship", () => {
     expect(ship.sunked).toBe(false);
   });
 
-  test("should increment timeHit", () => {
+  test("should increment timesHit", () => {
     const ship = new Ship(3);
     ship.hit();
     expect(ship.timesHit).toBe(1);
     ship.hit();
     expect(ship.timesHit).toBe(2);
+  });
+
+  test("should return sunk as true when timesHit equal length", () => {
+    const ship = new Ship(3);
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBe(true);
   });
 });
