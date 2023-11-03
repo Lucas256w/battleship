@@ -39,7 +39,7 @@ describe("Ship", () => {
   });
 });
 
-describe("Gameboard", () => {
+describe("Gameboard - placeShip", () => {
   test("should create correct grid", () => {
     const gameboard = new Gameboard();
     expect(gameboard.grid).toEqual([
@@ -140,5 +140,50 @@ describe("Gameboard", () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]);
+  });
+});
+
+describe("Gameboard - receiveAttack", () => {
+  test("update grid with hit miss", () => {
+    const ship = new Ship(3);
+    const gameboard = new Gameboard();
+
+    gameboard.placeShip(ship, 7, 4, ship.isHorizontal);
+    gameboard.receiveAttack(1, 3);
+
+    expect(gameboard.grid).toEqual([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, "miss", 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+  });
+
+  test("update grid with hit not miss", () => {
+    const ship = new Ship(3);
+    const gameboard = new Gameboard();
+
+    gameboard.placeShip(ship, 7, 4, ship.isHorizontal);
+    gameboard.receiveAttack(7, 4);
+
+    expect(gameboard.grid).toEqual([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, "hit", 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+    expect(ship.timesHit).toBe(1);
   });
 });
