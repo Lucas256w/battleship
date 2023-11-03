@@ -1,5 +1,6 @@
 import Ship from "./Ship";
 import Gameboard from "./Gameboard";
+import Player from "./Player";
 
 describe("Ship", () => {
   test("should initialize a ship with the correct length", () => {
@@ -211,5 +212,34 @@ describe("Gameboard - isGameOver", () => {
     gameboard.receiveAttack(7, 6);
 
     expect(gameboard.gameOver).toBe(true);
+  });
+});
+
+describe("Player", () => {
+  test("player should be able to attack enemy board", () => {
+    const ship = new Ship(3);
+    const gameboard = new Gameboard();
+
+    const gameboard2 = new Gameboard();
+
+    const player = new Player(gameboard, gameboard2, false);
+    const player2 = new Player(gameboard2, gameboard, false);
+
+    gameboard2.placeShip(ship, 7, 4, ship.isHorizontal);
+
+    player.takeTurn(7, 4);
+
+    expect(gameboard2.grid).toEqual([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, "hit", ship, ship, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
   });
 });
