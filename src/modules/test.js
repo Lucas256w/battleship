@@ -171,6 +171,7 @@ describe("Gameboard - receiveAttack", () => {
 
     gameboard.placeShip(ship, 7, 4, ship.isHorizontal);
     gameboard.receiveAttack(7, 4);
+    gameboard.receiveAttack(7, 5);
 
     expect(gameboard.grid).toEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -180,10 +181,35 @@ describe("Gameboard - receiveAttack", () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, "hit", ship, ship, 0, 0, 0],
+      [0, 0, 0, 0, "hit", "hit", ship, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]);
-    expect(ship.timesHit).toBe(1);
+    expect(ship.timesHit).toBe(2);
+  });
+});
+
+describe("Gameboard - isGameOver", () => {
+  test("check game is not over when not all ships have been hit", () => {
+    const ship = new Ship(3);
+    const gameboard = new Gameboard();
+
+    gameboard.placeShip(ship, 7, 4, ship.isHorizontal);
+    gameboard.receiveAttack(7, 4);
+    gameboard.receiveAttack(7, 5);
+
+    expect(gameboard.gameOver).toBe(false);
+  });
+
+  test("check game is over when all ships have been hit", () => {
+    const ship = new Ship(3);
+    const gameboard = new Gameboard();
+
+    gameboard.placeShip(ship, 7, 4, ship.isHorizontal);
+    gameboard.receiveAttack(7, 4);
+    gameboard.receiveAttack(7, 5);
+    gameboard.receiveAttack(7, 6);
+
+    expect(gameboard.gameOver).toBe(true);
   });
 });

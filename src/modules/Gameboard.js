@@ -3,6 +3,7 @@ import Ship from "./Ship";
 class Gameboard {
   constructor() {
     this.grid = this.makeGrid();
+    this.gameOver = false;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -52,11 +53,21 @@ class Gameboard {
     }
     this.grid[x][y].hit();
     this.grid[x][y] = "hit";
+    this.isGameOver();
     return true;
   }
 
   isGameOver() {
-    return this.grid.some((row) => row.includes(Ship));
+    let shipFound = false;
+    for (let i = 0; i < 10; i += 1) {
+      for (let j = 0; j < 10; j += 1) {
+        if (this.grid[i][j] instanceof Ship) {
+          shipFound = true;
+        }
+      }
+    }
+
+    this.gameOver = !shipFound;
   }
 }
 
