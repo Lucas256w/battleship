@@ -1,3 +1,5 @@
+import Ship from "./Ship";
+
 class Gameboard {
   constructor() {
     this.grid = this.makeGrid();
@@ -21,11 +23,11 @@ class Gameboard {
   placeShip(ship, x, y, isHorizontal) {
     for (let i = 0; i < ship.length; i += 1) {
       if (isHorizontal) {
-        if (this.grid[x][y + i] === 1 || this.grid[x][y + i] === undefined) {
+        if (this.grid[x][y + i] !== 0 || this.grid[x][y + i] === undefined) {
           return false;
         }
       } else if (
-        this.grid[x + 1][y] === 1 ||
+        this.grid[x + 1][y] !== 0 ||
         this.grid[x + 1][y] === undefined
       ) {
         return false;
@@ -33,9 +35,28 @@ class Gameboard {
     }
 
     for (let i = 0; i < ship.length; i += 1) {
-      isHorizontal ? (this.grid[x][y + i] = 1) : (this.grid[x + i][y] = 1);
+      isHorizontal
+        ? (this.grid[x][y + i] = ship)
+        : (this.grid[x + i][y] = ship);
     }
     return true;
+  }
+
+  receiveAttack(x, y) {
+    if (this.grid[x][y] === "miss" || this.grid[x][y] === "hit") {
+      return false;
+    }
+    if (this.grid[x][y] === 0) {
+      this.grid[x][y] = "miss";
+      return true;
+    }
+    this.grid[x][y].hit();
+    this.grid[x][y] = "hit";
+    return true;
+  }
+
+  isGameOver() {
+    return this.grid.some((row) => row.includes(Ship));
   }
 }
 
