@@ -7,10 +7,11 @@ describe("Ship", () => {
     expect(ship.length).toBe(3);
   });
 
-  test("should initialize timesHit to 0 and not be sunk", () => {
+  test("should initialize timesHit to 0, horizontal and not be sunk", () => {
     const ship = new Ship(2);
     expect(ship.timesHit).toBe(0);
     expect(ship.sunked).toBe(false);
+    expect(ship.isHorizontal).toBe(true);
   });
 
   test("should increment timesHit", () => {
@@ -28,12 +29,20 @@ describe("Ship", () => {
     ship.hit();
     expect(ship.sunked).toBe(true);
   });
+
+  test("ship should be able to rotate", () => {
+    const ship = new Ship(3);
+    ship.rotate();
+    expect(ship.isHorizontal).toBe(false);
+    ship.rotate();
+    expect(ship.isHorizontal).toBe(true);
+  });
 });
 
-describe("gameboard", () => {
+describe("Gameboard", () => {
   test("should create correct grid", () => {
     const gameboard = new Gameboard();
-    expect(gameboard.gird).toEqual([
+    expect(gameboard.grid).toEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -51,9 +60,9 @@ describe("gameboard", () => {
     const ship = new Ship(3);
     const gameboard = new Gameboard();
 
-    gameboard.placeShip(ship, 7, 4, true);
+    gameboard.placeShip(ship, 7, 4, ship.isHorizontal);
 
-    expect(gameboard.gird).toEqual([
+    expect(gameboard.grid).toEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -69,11 +78,12 @@ describe("gameboard", () => {
 
   test("should be able to place ships at specific coords vertically", () => {
     const ship = new Ship(3);
+    ship.rotate();
     const gameboard = new Gameboard();
 
-    gameboard.placeShip(ship, 7, 4, false);
+    gameboard.placeShip(ship, 7, 4, ship.isHorizontal);
 
-    expect(gameboard.gird).toEqual([
+    expect(gameboard.grid).toEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -92,10 +102,13 @@ describe("gameboard", () => {
     const ship2 = new Ship(4);
     const gameboard = new Gameboard();
 
-    gameboard.placeShip(ship, 7, 4, true);
-    gameboard.placeShip(ship2, 7, 4, true);
+    gameboard.placeShip(ship, 7, 3, ship.isHorizontal);
+    gameboard.placeShip(ship2, 7, 4, ship2.isHorizontal);
 
-    expect(gameboard.gird).toEqual([
+    ship2.rotate();
+    gameboard.placeShip(ship2, 6, 4, ship2.isHorizontal);
+
+    expect(gameboard.grid).toEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -110,12 +123,12 @@ describe("gameboard", () => {
   });
 
   test("should not be able to place out of bound", () => {
-    const ship = new Ship(3);
+    const ship = new Ship(4);
     const gameboard = new Gameboard();
 
-    gameboard.placeShip(ship, 0, 8, true);
+    gameboard.placeShip(ship, 0, 8, ship.isHorizontal);
 
-    expect(gameboard.gird).toEqual([
+    expect(gameboard.grid).toEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -123,7 +136,7 @@ describe("gameboard", () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]);
