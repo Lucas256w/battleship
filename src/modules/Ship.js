@@ -7,11 +7,11 @@ class Ship {
 
   hit() {
     this.timesHit += 1;
+    this.isSunk();
   }
 
   isSunk() {
     this.sunked = this.timesHit === this.length;
-    return this.sunked;
   }
 }
 
