@@ -24,14 +24,20 @@ class Gameboard {
   placeShip(ship, x, y, isHorizontal) {
     for (let i = 0; i < ship.length; i += 1) {
       if (isHorizontal) {
-        if (this.grid[x][y + i] !== 0 || this.grid[x][y + i] === undefined) {
+        if (this.grid[x][y + i] === undefined || this.grid[x][y + i] !== 0) {
           return false;
         }
-      } else if (
-        this.grid[x + 1][y] !== 0 ||
-        this.grid[x + 1][y] === undefined
-      ) {
-        return false;
+      }
+
+      if (!isHorizontal) {
+        try {
+          const temp = this.grid[x + i][y];
+        } catch (error) {
+          return false;
+        }
+        if (this.grid[x + i][y] !== 0) {
+          return false;
+        }
       }
     }
 

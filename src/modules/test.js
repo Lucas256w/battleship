@@ -124,10 +124,13 @@ describe("Gameboard - placeShip", () => {
   });
 
   test("should not be able to place out of bound", () => {
-    const ship = new Ship(4);
+    const ship = new Ship(5);
+    const ship2 = new Ship(3);
+    ship.rotate();
     const gameboard = new Gameboard();
 
-    gameboard.placeShip(ship, 0, 8, ship.isHorizontal);
+    gameboard.placeShip(ship, 6, 2, ship.isHorizontal);
+    gameboard.placeShip(ship2, 0, 9, ship2.isHorizontal);
 
     expect(gameboard.grid).toEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
