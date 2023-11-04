@@ -11,12 +11,13 @@ class UserInterface {
     const [player, enemy] = this.generatePlayers();
 
     this.generatePlayerGrid(gameboardOne, player);
-    this.generateEnemyGrid(gameboardTwo, enemy);
+    this.generateEnemyGrid(gameboardTwo, enemy, gameboardOne, player);
 
     this.generateEnemyShips(enemy);
   }
 
   static generatePlayerGrid(gameboard, player) {
+    gameboard.innerHTML = "";
     for (let i = 0; i < 10; i += 1) {
       const row = document.createElement("div");
       row.className = "cell-row";
@@ -34,7 +35,7 @@ class UserInterface {
     }
   }
 
-  static generateEnemyGrid(gameboard, enemy) {
+  static generateEnemyGrid(gameboard, enemy, gameboardOne, player) {
     for (let i = 0; i < 10; i += 1) {
       const row = document.createElement("div");
       row.className = "cell-row";
@@ -42,9 +43,15 @@ class UserInterface {
         const column = document.createElement("div");
         column.className = "cell-column";
         column.addEventListener("click", () => {
-          enemy.gameboard.receiveAttack(i, j);
-          column.classList.add(enemy.gameboard.grid[i][j]);
-          enemy.takeTurn();
+          if (
+            !column.classList.contains("hit") &&
+            !column.classList.contains("miss")
+          ) {
+            enemy.gameboard.receiveAttack(i, j);
+            column.classList.add(enemy.gameboard.grid[i][j]);
+            enemy.takeTurn();
+            this.generatePlayerGrid(gameboardOne, player);
+          }
         });
         row.appendChild(column);
       }
