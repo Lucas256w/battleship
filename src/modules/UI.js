@@ -2,6 +2,19 @@ import Ship from "./Ship";
 import Player from "./Player";
 import Gameboard from "./Gameboard";
 
+const carrierPlayer = new Ship(5);
+const battleShipPlayer = new Ship(4);
+const cruiserPlayer = new Ship(3);
+const submarinePlayer = new Ship(3);
+const destroyerPlayer = new Ship(2);
+const shipArrayPlayer = [
+  carrierPlayer,
+  battleShipPlayer,
+  cruiserPlayer,
+  submarinePlayer,
+  destroyerPlayer,
+];
+
 class UserInterface {
   static activateUI() {
     console.log("hello");
@@ -10,10 +23,11 @@ class UserInterface {
 
     const [player, enemy] = this.generatePlayers();
 
-    this.generatePlayerGrid(gameboardOne, player);
+    // this.generatePlayerGrid(gameboardOne, player);
     this.generateEnemyGrid(gameboardTwo, enemy, gameboardOne, player);
 
     this.generateEnemyShips(enemy);
+    this.placeShipDialog(gameboardOne, player, shipArrayPlayer.pop());
   }
 
   static generatePlayerGrid(gameboard, player) {
@@ -91,6 +105,95 @@ class UserInterface {
     const enemy = new Player(enemyGameboard, playerGameboard, true);
 
     return [player, enemy];
+  }
+
+  static placeShipDialog(gameboard, player, ship) {
+    const dialog = document.querySelector("dialog");
+    dialog.showModal();
+    const placementGrid = document.querySelector("#placement-grid");
+
+    const rotateBtn = document.querySelector("#rotate-button");
+    rotateBtn.addEventListener("click", () => {
+      ship.rotate();
+    });
+    placementGrid.innerHTML = "";
+    for (let i = 0; i < 10; i += 1) {
+      const row = document.createElement("div");
+      row.className = "placement-row";
+      for (let j = 0; j < 10; j += 1) {
+        const column = document.createElement("div");
+        column.className = "placement-column";
+        column.setAttribute("Coordinate", `${i}${j}`);
+        if (player.gameboard.grid[i][j] instanceof Ship) {
+          column.classList.add("ship");
+        }
+
+        column.addEventListener("mouseover", () => {
+          for (let z = ship.length - 1; z >= 0; z -= 1) {
+            try {
+              if (ship.isHorizontal) {
+                const cell = document.querySelector(
+                  `[Coordinate="${i}${j + z}"]`,
+                );
+                cell.classList.add("yellow");
+              } else {
+                const cell = document.querySelector(
+                  `[Coordinate="${i + z}${j}"]`,
+                );
+                cell.classList.add("yellow");
+              }
+            } catch (error) {
+              console.log("can't place it there");
+              break;
+            }
+          }
+        });
+
+        column.addEventListener("mouseout", () => {
+          for (let z = ship.length - 1; z >= 0; z -= 1) {
+            try {
+              if (ship.isHorizontal) {
+                const cell = document.querySelector(
+                  `[Coordinate="${i}${j + z}"]`,
+                );
+                cell.classList.remove("yellow");
+              } else {
+                const cell = document.querySelector(
+                  `[Coordinate="${i + z}${j}"]`,
+                );
+                cell.classList.remove("yellow");
+              }
+            } catch (error) {
+              console.log("");
+              break;
+            }
+          }
+        });
+
+        column.addEventListener("click", () => {
+          const result = player.gameboard.placeShip(
+            ship,
+            i,
+            j,
+            ship.isHorizontal,
+          );
+
+          if (result) {
+            if (shipArrayPlayer.length === 0) {
+              dialog.style.display = "none";
+              dialog.close();
+              this.generatePlayerGrid(gameboard, player);
+            } else {
+              this.placeShipDialog(gameboard, player, shipArrayPlayer.pop());
+            }
+          }
+          console.log(result);
+        });
+
+        row.appendChild(column);
+      }
+      placementGrid.appendChild(row);
+    }
   }
 }
 
