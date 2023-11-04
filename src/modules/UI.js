@@ -2,11 +2,11 @@ import Ship from "./Ship";
 import Player from "./Player";
 import Gameboard from "./Gameboard";
 
-const carrierPlayer = new Ship(5);
-const battleShipPlayer = new Ship(4);
-const cruiserPlayer = new Ship(3);
-const submarinePlayer = new Ship(3);
-const destroyerPlayer = new Ship(2);
+const carrierPlayer = new Ship(5, "Carrier");
+const battleShipPlayer = new Ship(4, "BattleShip");
+const cruiserPlayer = new Ship(3, "Destroyer");
+const submarinePlayer = new Ship(3, "Submarine");
+const destroyerPlayer = new Ship(2, "Patrol Boat");
 const shipArrayPlayer = [
   carrierPlayer,
   battleShipPlayer,
@@ -23,7 +23,7 @@ class UserInterface {
 
     const [player, enemy] = this.generatePlayers();
 
-    // this.generatePlayerGrid(gameboardOne, player);
+    this.generatePlayerGrid(gameboardOne, player);
     this.generateEnemyGrid(gameboardTwo, enemy, gameboardOne, player);
 
     this.generateEnemyShips(enemy);
@@ -50,6 +50,12 @@ class UserInterface {
   }
 
   static generateEnemyGrid(gameboard, enemy, gameboardOne, player) {
+    const winnerDialog = document.querySelector("#winner-dialog");
+    const winnerTitle = document.querySelector("#winner-title");
+    const playAgainBtn = document.querySelector("#play-again-btn");
+    playAgainBtn.addEventListener("click", () => {
+      location.reload();
+    });
     for (let i = 0; i < 10; i += 1) {
       const row = document.createElement("div");
       row.className = "cell-row";
@@ -63,8 +69,18 @@ class UserInterface {
           ) {
             enemy.gameboard.receiveAttack(i, j);
             column.classList.add(enemy.gameboard.grid[i][j]);
+            if (enemy.gameboard.gameOver) {
+              winnerDialog.showModal();
+              winnerTitle.textContent = "Congratulations You've Won!";
+              winnerDialog.style.display = "flex";
+            }
             enemy.takeTurn();
             this.generatePlayerGrid(gameboardOne, player);
+            if (player.gameboard.gameOver) {
+              winnerDialog.showModal();
+              winnerTitle.textContent = "Oh No You've Lost!";
+              winnerDialog.style.display = "flex";
+            }
           }
         });
         row.appendChild(column);
@@ -108,9 +124,12 @@ class UserInterface {
   }
 
   static placeShipDialog(gameboard, player, ship) {
-    const dialog = document.querySelector("dialog");
+    const dialog = document.querySelector("#placement-dialog");
     dialog.showModal();
     const placementGrid = document.querySelector("#placement-grid");
+
+    const dialogTitle = document.querySelector("#dialog-title");
+    dialogTitle.textContent = `Place your ${ship.name}`;
 
     const rotateBtn = document.querySelector("#rotate-button");
     rotateBtn.addEventListener("click", () => {
