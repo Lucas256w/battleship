@@ -118,6 +118,7 @@ header{
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 100px;
 }
 
 /* MAIN */
@@ -172,6 +173,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 100px;
 }
 
 /* DIALOG */
@@ -191,7 +193,11 @@ dialog::backdrop{
     opacity: 50%;
 }
 
-#rotate-button{
+#winner-dialog{
+    display: none;
+}
+
+button{
     background-color: gray;
     border: none;
     border-radius: 2px;
@@ -201,7 +207,7 @@ dialog::backdrop{
     margin: var(--spacing-md);
 }
 
-#rotate-button:hover{
+button:hover{
     cursor: pointer;
     filter: brightness(90%);
 }
