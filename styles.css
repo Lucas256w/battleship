@@ -130,7 +130,7 @@ main{
 }
 
 .gameboard{
-    border: 2px solid black;
+    border: 2px solid var(--black);
     height: 400px;
     width: 400px;
     display: grid;
@@ -138,13 +138,28 @@ main{
 }
 
 .cell-row{
-    border: 2px solid black;
     display: grid;
     grid-template-columns: repeat(10, 40px);
 }
 
 .cell-column{
-    border: 2px solid black;
+    border: 2px solid var(--black);
+}
+
+#gameboard-two .cell-row .cell-column:hover{
+    cursor: pointer;
+}
+
+.miss{
+    background-color: red;
+}
+
+.hit{
+    background-color: green;
+}
+
+.ship{
+    background-color: var(--grey);
 }
 
 /* FOOTER */
