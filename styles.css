@@ -162,10 +162,64 @@ main{
     background-color: var(--grey);
 }
 
+.yellow{
+    background-color: yellow;
+}
+
 /* FOOTER */
 
 footer {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* DIALOG */
+
+dialog{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    top: 50%;
+    bottom: 50%;
+    font-size: 2rem;
+}
+
+dialog::backdrop{
+    background-color: black;
+    opacity: 50%;
+}
+
+#rotate-button{
+    background-color: gray;
+    border: none;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 2rem;
+    color: var(--white);
+    margin: var(--spacing-md);
+}
+
+#rotate-button:hover{
+    cursor: pointer;
+    filter: brightness(90%);
+}
+
+
+#placement-grid{
+    height: 400px;
+    width: 400px;
+    border: 2px solid var(--black);
+    display: grid;
+    grid-template-rows: repeat(10, 40px);
+}
+
+.placement-row{
+    display: grid;
+    grid-template-columns: repeat(10, 40px);
+}
+
+.placement-column{
+    border: 2px solid var(--black);
 }
